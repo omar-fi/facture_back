@@ -7,9 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity @Data @NoArgsConstructor @AllArgsConstructor
-public class User {
-    @Id @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AgentInscrit {
+    @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     Long id;
     String fullName;
     String email;
