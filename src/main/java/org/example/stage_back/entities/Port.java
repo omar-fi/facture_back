@@ -14,4 +14,7 @@ public class Port {
     private String nom;
     private String ville;
     private Double tauxRK;
+
+    @ManyToOne
+    private Admin admin;
 } 

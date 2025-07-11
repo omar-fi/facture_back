@@ -23,6 +23,7 @@ public class AgentInscritController {
         agent.setRaisonSociale(request.getRaisonSociale());
         agent.setPortDemande(request.getPortDemande());
         agent.setICE(request.getICE());
+        agent.setPassword(request.getPassword());
         agent.setStatut(AgentInscrit.Statut.EN_ATTENTE);
         agent.setDateInscription(new Date());
         AgentInscrit saved = agentInscritRepository.save(agent);

@@ -9,4 +9,5 @@ public class AgentInscriptionRequest {
     private String raisonSociale;
     private String portDemande;
     private Double ICE;
+    private String password;
 } 

@@ -20,7 +20,7 @@ public class AgentInscrit {
     @Enumerated(EnumType.STRING)
     private Statut statut;
     private Date dateInscription;
-
+    private String password;
     public enum Statut {
         EN_ATTENTE, VALIDE, REJETE
     }
