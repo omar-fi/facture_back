@@ -9,4 +9,7 @@ import jakarta.persistence.ManyToOne;
 public class Agent extends User {
     @ManyToOne
     private Port port;
+    String raisonSociale;
+    String portDemande ;
+    Long  ICE;
 }
