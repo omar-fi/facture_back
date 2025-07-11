@@ -22,7 +22,7 @@ public class AgentInscritController {
         agent.setEmail(request.getEmail());
         agent.setRaisonSociale(request.getRaisonSociale());
         agent.setPortDemande(request.getPortDemande());
-        agent.setICE(request.getICE());
+        agent.setICE(request.getIce());
         agent.setPassword(request.getPassword());
         agent.setStatut(AgentInscrit.Statut.EN_ATTENTE);
         agent.setDateInscription(new Date());

@@ -13,5 +13,5 @@ public class Agent extends User {
     private Port port;
     String raisonSociale;
     String portDemande ;
-    Long  ICE;
+    Long ICE;
 }
