@@ -1,11 +1,8 @@
 package org.example.stage_back.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -13,11 +10,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AgentInscrit {
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    Long id;
-    String fullName;
-    String email;
-    String password;
-    Role role;
-    String SocieteMaritime;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String email;
+    private String fullName;
+    private String raisonSociale;
+    private String portDemande;
+    private Double ICE;
+    @Enumerated(EnumType.STRING)
+    private Statut statut;
+    private Date dateInscription;
+
+    public enum Statut {
+        EN_ATTENTE, VALIDE, REJETE
+    }
 }

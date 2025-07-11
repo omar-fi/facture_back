@@ -1,19 +1,21 @@
 package org.example.stage_back.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import java.sql.Timestamp;
 
-@Entity @Data @NoArgsConstructor @AllArgsConstructor
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "role_type")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
-    @Id @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    Long id;
-    String fullName;
-    String email;
-    String password;
-    Role role;
-    String SocieteMaritime;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String fullName;
+    private String email;
+    private String passwordHash;
+    private Timestamp createdAt;
 }

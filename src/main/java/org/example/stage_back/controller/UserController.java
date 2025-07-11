@@ -9,12 +9,5 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    @Autowired
-    private UserService userService;
 
-    @PostMapping("/register")
-    public AgentInscrit register(@RequestBody AgentInscrit user) {
-
-        return userService.registerUser(user);
-    }
 } 
