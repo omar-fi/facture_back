@@ -13,7 +13,7 @@ public class AgentInscrit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String email;
-    private String fullName;
+
     private String raisonSociale;
     private String portDemande;
     private Double ICE;

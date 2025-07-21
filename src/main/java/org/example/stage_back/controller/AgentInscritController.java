@@ -23,11 +23,10 @@ public class AgentInscritController {
     @Autowired
     private AgentRepository agentRepository;
 
-    // POST: inscription d'un agent
+
     @PostMapping("/register")
     public ResponseEntity<AgentInscrit> register(@RequestBody AgentInscriptionRequest request) {
         AgentInscrit agent = new AgentInscrit();
-        agent.setFullName(request.getFullName());
         agent.setEmail(request.getEmail());
         agent.setRaisonSociale(request.getRaisonSociale());
         agent.setPortDemande(request.getPortDemande());
@@ -39,7 +38,7 @@ public class AgentInscritController {
         return ResponseEntity.ok(saved);
     }
 
-    // GET: liste des agents inscrits en attente
+
     @GetMapping("/admin/agents-inscrits")
     public ResponseEntity<?> getAllAgentsInscrits() {
         return ResponseEntity.ok(agentInscritRepository.findAll()
@@ -48,12 +47,12 @@ public class AgentInscritController {
             .toList());
     }
 
-    // POST: accepter un agent inscrit
+
     @PostMapping("/admin/agents-inscrits/{id}/accepter")
     public ResponseEntity<?> accepterAgentInscrit(@PathVariable Integer id) {
         return agentInscritRepository.findById(id)
             .map(agentInscrit -> {
-                // Créer Agent (hérite de User)
+
                 Agent agent = new Agent();
                 agent.setEmail(agentInscrit.getEmail());
                 agent.setPassword(agentInscrit.getPassword());
@@ -61,16 +60,15 @@ public class AgentInscritController {
                 agent.setRaisonSociale(agentInscrit.getRaisonSociale());
                 agent.setPortDemande(agentInscrit.getPortDemande());
                 agent.setICE(agentInscrit.getICE() != null ? agentInscrit.getICE().longValue() : null);
-                // agent.setPort(...) // à compléter si tu veux lier à un port existant
+
                 agentRepository.save(agent);
-                // Supprimer l'agent inscrit
+
                 agentInscritRepository.delete(agentInscrit);
                 return ResponseEntity.ok().build();
             })
             .orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETE: rejeter un agent inscrit
     @DeleteMapping("/admin/agents-inscrits/{id}")
     public ResponseEntity<?> supprimerAgentInscrit(@PathVariable Integer id) {
         if (agentInscritRepository.existsById(id)) {
@@ -80,4 +78,4 @@ public class AgentInscritController {
             return ResponseEntity.notFound().build();
         }
     }
-} 
+}
