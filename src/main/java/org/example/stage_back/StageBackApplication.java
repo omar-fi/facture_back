@@ -34,7 +34,6 @@ public class StageBackApplication {
 
       
             Admin admin = new Admin();
-            admin.setFullName("omar filali");
             admin.setEmail("admin@test.com");
             admin.setPassword("admin123");
             admin.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -42,7 +41,6 @@ public class StageBackApplication {
 
             
             Agent agent = new Agent();
-            agent.setFullName("Mohamed bounouar");
             agent.setEmail("agent@test.com");
             agent.setPassword("agent123");
             agent.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -50,7 +48,6 @@ public class StageBackApplication {
             agentRepository.save(agent);
 
             Taxateur taxateur = new Taxateur();
-            taxateur.setFullName("Taxateur Test");
             taxateur.setEmail("taxateur@test.com");
             taxateur.setPassword("taxateur123");
             taxateur.setCreatedAt(new Timestamp(System.currentTimeMillis()));

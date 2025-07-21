@@ -55,7 +55,6 @@ public class AgentInscritController {
             .map(agentInscrit -> {
                 // Créer Agent (hérite de User)
                 Agent agent = new Agent();
-                agent.setFullName(agentInscrit.getFullName());
                 agent.setEmail(agentInscrit.getEmail());
                 agent.setPassword(agentInscrit.getPassword());
                 agent.setCreatedAt(new Timestamp(System.currentTimeMillis()));
