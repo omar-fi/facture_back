@@ -11,10 +11,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeHttpRequests()
-            .anyRequest().permitAll(); // Autoriser tout
+                .csrf().disable()
+                .authorizeHttpRequests()
+                .anyRequest().permitAll(); // Autoriser tout
 
         return http.build();
     }
-} 
+}

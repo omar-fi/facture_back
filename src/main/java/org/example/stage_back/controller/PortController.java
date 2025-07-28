@@ -26,7 +26,7 @@ public class PortController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Port> updatePort(@PathVariable Integer id, @RequestBody Port portDetails){
+    public ResponseEntity<Port> updatePort(@PathVariable Long id, @RequestBody Port portDetails){
         return portRepository.findById(id)
                 .map(port -> {
                     port.setNom(portDetails.getNom());
@@ -38,7 +38,7 @@ public class PortController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePort(@PathVariable Integer id){
+    public ResponseEntity<?> deletePort(@PathVariable Long id){
         return portRepository.findById(id)
                 .map(port -> {
                     portRepository.delete(port);
