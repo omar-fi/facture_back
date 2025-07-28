@@ -14,6 +14,8 @@ public class TarifSpecifique {
     private Integer portId;
     private String categorie;
     private String libelle;
-    private String unite;
+    @Enumerated(EnumType.STRING) // pour stocker "m3", "Tonne", "Unité" comme texte
+    private Unite unite;
+
     private Double tarifUnitaire;
 } 

@@ -7,7 +7,7 @@ public class AgentInscriptionRequest {
     private String fullName;
     private String email;
     private String raisonSociale;
-    private String portDemande;
+    private Long portId;
     private Double ice;
     private String password;
 } 

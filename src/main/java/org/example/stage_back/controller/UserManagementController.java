@@ -37,7 +37,7 @@ public class UserManagementController {
             // Vérification que l'agent a un port
             if (agent.getPort() != null) {
                 dto.setPortNom(agent.getPort().getNom());
-                dto.setPortId(agent.getPort() != null ? Long.valueOf(agent.getPort().getId()) : null);
+                dto.setPortId(agent.getPort().getId());
             } else {
                 dto.setPortNom("Aucun port");
                 dto.setPortId(null);  // Ou vous pouvez attribuer un ID par défaut
@@ -55,7 +55,7 @@ public class UserManagementController {
             // Vérification que le taxateur a un port
             if (tax.getPort() != null) {
                 dto.setPortNom(tax.getPort().getNom());
-                dto.setPortId(tax.getPort() != null ? Long.valueOf(tax.getPort().getId()) : null);
+                dto.setPortId(tax.getPort().getId());
             } else {
                 dto.setPortNom("Aucun port");
                 dto.setPortId(null);  // Ou vous pouvez attribuer un ID par défaut
@@ -86,7 +86,7 @@ public class UserManagementController {
     // ✅ 4. Créer un taxateur
     @PostMapping("/taxateur")
     public ResponseEntity<?> createTaxateur(@RequestBody TaxateurRequestDTO request) {
-        Port port = portRepository.findById(Math.toIntExact(request.getPortId())).orElseThrow();
+        Port port = portRepository.findById(request.getPortId()).orElseThrow();
         Taxateur taxateur = new Taxateur();
         taxateur.setEmail(request.getEmail());
         taxateur.setPassword(request.getPassword()); // À encoder si sécurité activée
@@ -99,7 +99,7 @@ public class UserManagementController {
     @PutMapping("/taxateur/{id}")
     public ResponseEntity<?> updateTaxateur(@PathVariable Long id, @RequestBody TaxateurRequestDTO request) {
         Taxateur taxateur = taxateurRepository.findById(id).orElseThrow();
-        Port port = portRepository.findById(Math.toIntExact(request.getPortId())).orElseThrow();
+        Port port = portRepository.findById(request.getPortId()).orElseThrow();
         taxateur.setEmail(request.getEmail());
         taxateur.setPort(port);
         taxateurRepository.save(taxateur);

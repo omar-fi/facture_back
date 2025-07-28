@@ -10,7 +10,7 @@ import lombok.*;
 public class Port {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String nom;
     private String ville;
     private Double tauxRK;

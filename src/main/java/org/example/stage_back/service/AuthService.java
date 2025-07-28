@@ -7,6 +7,7 @@ import org.example.stage_back.repository.AdminRepository;
 import org.example.stage_back.repository.AgentRepository;
 import org.example.stage_back.repository.TaxateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,8 @@ public class AuthService {
 
     public String authenticate(String email, String password) {
         User user = userRepo.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
+
 
         if (passwordEncoder != null) {
             if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -46,4 +48,5 @@ public class AuthService {
         }
         return "UNKNOWN";
     }
+
 } 
