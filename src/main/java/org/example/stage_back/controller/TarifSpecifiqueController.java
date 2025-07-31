@@ -34,6 +34,7 @@ public class TarifSpecifiqueController {
                     tarif.setLibelle(details.getLibelle());
                     tarif.setUnite(details.getUnite());
                     tarif.setTarifUnitaire(details.getTarifUnitaire());
+                    tarif.setGroupName(details.getGroupName() != null ? details.getGroupName() : "Autre");
                     TarifSpecifique updated = tarifSpecifiqueRepository.save(tarif);
                     return ResponseEntity.ok(updated);
                 }).orElse(ResponseEntity.notFound().build());

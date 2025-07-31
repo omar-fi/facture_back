@@ -34,6 +34,7 @@ public class TarifStandardController {
                     tarif.setLibelle(details.getLibelle());
                     tarif.setUnite(details.getUnite());
                     tarif.setTarifUnitaire(details.getTarifUnitaire());
+                    tarif.setGroupName(details.getGroupName() != null ? details.getGroupName() : "Autre");
                     TarifStandard updated = tarifStandardRepository.save(tarif);
                     return ResponseEntity.ok(updated);
                 }).orElse(ResponseEntity.notFound().build());

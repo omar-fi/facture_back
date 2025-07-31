@@ -32,6 +32,7 @@ public class CategoriesController {
                 .map(category -> {
                     category.setCategorie(categoryDetails.getCategorie());
                     category.setLibelle(categoryDetails.getLibelle());
+                    category.setGroupName(categoryDetails.getGroupName());
                     category.setUnite(categoryDetails.getUnite());
                     Categories updatedCategory = categoriesRepository.save(category);
                     return ResponseEntity.ok(updatedCategory);

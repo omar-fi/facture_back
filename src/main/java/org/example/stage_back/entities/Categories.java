@@ -1,10 +1,7 @@
 package org.example.stage_back.entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +15,7 @@ public class Categories {
     private int id;
     private int categorie;
     private String libelle;
-    private String unite;
+    @Enumerated(EnumType.STRING)
+    private Unite unite;
+    private String groupName;
 }

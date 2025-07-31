@@ -16,6 +16,6 @@ public class TarifStandard {
     private String libelle;
     @Enumerated(EnumType.STRING) // pour stocker "m3", "Tonne", "Unité" comme texte
     private Unite unite;
-
+    private String groupName;
     private Double tarifUnitaire;
 } 
