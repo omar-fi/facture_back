@@ -7,15 +7,10 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TarifSpecifique {
+public class TarifIsps {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer portId;
-    private String categorie;
     private String libelle;
-    @Enumerated(EnumType.STRING)
-    private Unite unite;
-    private String groupName;
-    private Double tarifUnitaire;
+    private Double tarif;
 } 

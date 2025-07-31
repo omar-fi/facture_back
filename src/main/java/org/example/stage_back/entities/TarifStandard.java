@@ -18,4 +18,5 @@ public class TarifStandard {
     private Unite unite;
     private String groupName;
     private Double tarifUnitaire;
+    private Double tarifsIsps;
 } 
