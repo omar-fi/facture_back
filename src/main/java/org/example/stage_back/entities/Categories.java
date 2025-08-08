@@ -17,5 +17,4 @@ public class Categories {
     private String libelle;
     @Enumerated(EnumType.STRING)
     private Unite unite;
-    private String groupName;
 }

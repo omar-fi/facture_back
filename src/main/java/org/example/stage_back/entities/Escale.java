@@ -12,7 +12,7 @@ import java.util.List;
 public class Escale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     private Navire navire;

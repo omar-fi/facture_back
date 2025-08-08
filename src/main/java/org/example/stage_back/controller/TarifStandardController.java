@@ -2,7 +2,6 @@ package org.example.stage_back.controller;
 
 import org.example.stage_back.entities.TarifStandard;
 import org.example.stage_back.repository.TarifStandardRepository;
-import org.example.stage_back.repository.TarifIspsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +14,6 @@ public class TarifStandardController {
 
     @Autowired
     private TarifStandardRepository tarifStandardRepository;
-    
-    @Autowired
-    private TarifIspsRepository tarifIspsRepository;
 
     @GetMapping
     public List<TarifStandard> getAll() {
@@ -26,8 +22,6 @@ public class TarifStandardController {
 
     @PostMapping
     public TarifStandard create(@RequestBody TarifStandard tarif) {
-
-        tarif.setTarifsIsps(calculateTarifIsps(tarif.getLibelle()));
         return tarifStandardRepository.save(tarif);
     }
 
@@ -41,8 +35,6 @@ public class TarifStandardController {
                     tarif.setUnite(details.getUnite());
                     tarif.setTarifUnitaire(details.getTarifUnitaire());
                     tarif.setGroupName(details.getGroupName() != null ? details.getGroupName() : "Autre");
-                    // Calcul automatique du tarif ISPS depuis la table tarifs_isps
-                    tarif.setTarifsIsps(calculateTarifIsps(details.getLibelle()));
                     TarifStandard updated = tarifStandardRepository.save(tarif);
                     return ResponseEntity.ok(updated);
                 }).orElse(ResponseEntity.notFound().build());
@@ -58,17 +50,15 @@ public class TarifStandardController {
     }
 
     /**
-     * Calcule le tarif ISPS en recherchant dans la table tarifs_isps
-     * Si le libellé existe dans la table, retourne sa valeur, sinon retourne 0
+     * Calcule le tarif ISPS selon la logique métier
+     * Si le libellé contient "pleins", retourne 0, sinon retourne une valeur par défaut
      */
     private Double calculateTarifIsps(String libelle) {
-        if (libelle == null || libelle.trim().isEmpty()) {
+        if (libelle != null && libelle.toLowerCase().contains("pleins")) {
             return 0.0;
+        } else {
+            // Vous pouvez modifier cette valeur par défaut selon vos besoins
+            return 50.0; // Valeur par défaut pour les autres cas
         }
-        
-        // Recherche dans la table tarifs_isps
-        return tarifIspsRepository.findByLibelleIgnoreCase(libelle.trim())
-                .map(tarifIsps -> tarifIsps.getTarif())
-                .orElse(0.0); // Retourne 0 si le libellé n'existe pas dans la table
     }
 } 
