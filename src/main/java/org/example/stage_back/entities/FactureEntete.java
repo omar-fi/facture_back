@@ -17,6 +17,9 @@ public class FactureEntete {
     @ManyToOne
     private Escale escale;
 
+    @ManyToOne
+    private Manifeste manifeste;
+
     @OneToMany(mappedBy = "factureEntete")
     private List<FactureDetail> details;
 
