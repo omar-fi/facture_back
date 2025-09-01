@@ -50,16 +50,10 @@ public class EmailService {
      * Envoie une notification de facture générée
      */
     public void notifierFactureGeneree(FactureEntete facture) {
-        try {
-            if (facture.getManifeste() != null && facture.getManifeste().getUser() != null) {
-                String emailAgent = facture.getManifeste().getUser().getEmail();
-                logger.info("Notification de facture générée pour l'agent: {}", emailAgent);
-                
-                // TODO: Implémenter la notification
-                logger.info("Notification envoyée avec succès");
-            }
-        } catch (Exception e) {
-            logger.error("Erreur lors de l'envoi de la notification", e);
-        }
+        // Simulation d'envoi d'email
+        logger.info("Email de notification envoyé pour la facture: {}", facture.getId());
+        
+        // Ici vous pourriez implémenter l'envoi d'email réel
+        // Par exemple avec JavaMailSender ou un service externe
     }
 }

@@ -15,7 +15,7 @@ public class TarifSpecifique {
     private String categorie;
     private String libelle;
     @Enumerated(EnumType.STRING)
-    private Unite unite;
+    private unite unite;
     private String groupName;
     private Double tarifUnitaire;
 } 

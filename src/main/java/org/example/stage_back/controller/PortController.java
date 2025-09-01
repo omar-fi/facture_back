@@ -1,5 +1,6 @@
 package org.example.stage_back.controller;
 
+import org.example.stage_back.dto.PortDTO;
 import org.example.stage_back.entities.Port;
 import org.example.stage_back.repository.PortRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin/ports")
@@ -16,8 +18,10 @@ public class PortController {
     private PortRepository portRepository;
 
     @GetMapping
-    public List<Port> getAllPorts() {
-        return portRepository.findAll();
+    public List<PortDTO> getAllPorts() {
+        return portRepository.findAll().stream()
+                .map(PortDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @PostMapping

@@ -13,7 +13,5 @@ public class TraitementManifestRequest {
     public static class LigneTraitement {
         private Integer manifestLineId;
         private Double tarifUnitaire;
-        private String unite;
-        private String commentaire;
     }
 }

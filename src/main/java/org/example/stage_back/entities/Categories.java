@@ -16,5 +16,5 @@ public class Categories {
     private int categorie;
     private String libelle;
     @Enumerated(EnumType.STRING)
-    private Unite unite;
+    private unite unite;
 }
