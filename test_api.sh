@@ -1,38 +1,13 @@
 #!/bin/bash
 
-echo "🧪 Test de l'API ANP"
-echo "===================="
+echo "Test de l'API des manifests en attente..."
+curl -X GET "http://localhost:8080/api/taxateur/manifests/en-attente" -H "Accept: application/json"
 
-# Attendre que l'application démarre
-echo "⏳ Attente du démarrage de l'application..."
-sleep 15
+echo -e "\n\nTest de tous les manifests..."
+curl -X GET "http://localhost:8080/api/taxateur/manifests/all" -H "Accept: application/json"
 
-# Test 1: Endpoint de base
-echo "📡 Test 1: Endpoint de base"
-curl -s "http://localhost:8080/api/test/hello" || echo "❌ Échec"
+echo -e "\n\nTest de l'upload d'un manifest..."
+curl -X POST "http://localhost:8080/api/manifest/upload" -F "file=@test.xml" -F "agentId=1"
 
-# Test 2: Compter les manifests
-echo -e "\n📊 Test 2: Compter les manifests"
-curl -s "http://localhost:8080/api/test/manifests/count" || echo "❌ Échec"
-
-# Test 3: Compter les factures
-echo -e "\n📄 Test 3: Compter les factures"
-curl -s "http://localhost:8080/api/test/factures/count" || echo "❌ Échec"
-
-# Test 4: Compter les agents
-echo -e "\n👥 Test 4: Compter les agents"
-curl -s "http://localhost:8080/api/test/agents/count" || echo "❌ Échec"
-
-# Test 5: Statut complet
-echo -e "\n🔍 Test 5: Statut complet"
-curl -s "http://localhost:8080/api/test/status" | jq . 2>/dev/null || curl -s "http://localhost:8080/api/test/status"
-
-# Test 6: Manifests en attente
-echo -e "\n📋 Test 6: Manifests en attente"
-curl -s "http://localhost:8080/api/taxateur/manifests/en-attente" | jq . 2>/dev/null || curl -s "http://localhost:8080/api/taxateur/manifests/en-attente"
-
-# Test 7: Tous les manifests
-echo -e "\n📋 Test 7: Tous les manifests"
-curl -s "http://localhost:8080/api/manifest/all" | jq . 2>/dev/null || curl -s "http://localhost:8080/api/manifest/all"
-
-echo -e "\n✅ Tests terminés"
+echo -e "\n\nTest des manifests en attente après upload..."
+curl -X GET "http://localhost:8080/api/taxateur/manifests/en-attente" -H "Accept: application/json"

@@ -104,3 +104,4 @@ curl -X POST http://localhost:8080/api/taxateur/3/change-password \
 
 echo ""
 echo "=== Fin des tests ==="
+

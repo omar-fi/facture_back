@@ -18,6 +18,7 @@ public class HeaderXml {
     private String codeEdiConsignataire;
     private String CodePortAnp;
     private String Trafic;
+    private String NavireID;
 
     // getters/setters
 
@@ -53,4 +54,8 @@ public class HeaderXml {
 
     public String getTrafic() { return Trafic; }
     public void setTrafic(String trafic) { this.Trafic = trafic; }
+
+    public Integer getNavireID() {
+        return Integer.parseInt(NavireID);
+    }
 }

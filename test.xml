@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IFCSUM>
+    <Header>
+        <Emetteur>TEST_AGENT</Emetteur>
+        <CodePortAnp>1</CodePortAnp>
+        <Trafic>IMPORT</Trafic>
+        <NavireID>1</NavireID>
+    </Header>
+    <DetailManifeste>
+        <Informations>
+            <InformationMarchandise>
+                <CodeSH>12345678</CodeSH>
+                <DesignationMarchandise>MARCHANDISE TEST</DesignationMarchandise>
+                <Tonnage>1000.0</Tonnage>
+            </InformationMarchandise>
+        </Informations>
+    </DetailManifeste>
+</IFCSUM>
+

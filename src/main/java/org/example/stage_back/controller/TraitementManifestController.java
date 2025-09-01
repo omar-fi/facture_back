@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/taxateur/manifests")
+@RequestMapping("/api/traitement/manifests") // <- Mapping changé pour éviter conflit
 public class TraitementManifestController {
 
     @Autowired
@@ -33,7 +33,7 @@ public class TraitementManifestController {
     /**
      * Liste les manifests en attente de traitement
      */
-    @GetMapping("/en-attente")
+    @GetMapping("/en-attente-traitement")
     public ResponseEntity<List<ManifestDTO>> getManifestsEnAttente() {
         try {
             List<ManifestDTO> manifests = traitementManifestService.getManifestsEnAttente();

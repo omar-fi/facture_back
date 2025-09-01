@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         String role = authService.authenticate(request.getEmail(), request.getPassword());
         return ResponseEntity.ok(Map.of("role", role));

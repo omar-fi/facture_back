@@ -1,51 +1,51 @@
 package org.example.stage_back.controller;
 
-import org.example.stage_back.dto.ManifestDTO;
-import org.example.stage_back.entities.Manifeste;
-import org.example.stage_back.repository.ManifesteRepository;
+import lombok.RequiredArgsConstructor;
 import org.example.stage_back.service.ManifestService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.stage_back.repository.ManifesteRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.example.stage_back.dto.ManifestDTO;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/manifest")
+@RequiredArgsConstructor
 public class ManifestController {
 
-    @Autowired
-    private ManifestService manifestService;
-
-    @Autowired
-    private ManifesteRepository manifesteRepository;
+    private final ManifestService manifestService;
+    private final ManifesteRepository manifesteRepository;
 
     @PostMapping("/upload")
-    public ResponseEntity<?> uploadManifest(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("agentId") Long agentId) {
+    public ResponseEntity<?> uploadManifest(@RequestParam("file") MultipartFile file, @RequestParam("agentId") Long agentId) {
         try {
             manifestService.parseAndSaveManifest(file, file.getOriginalFilename(), agentId);
-            return ResponseEntity.ok().build();
+            // 201 Created est plus sémantique
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur : " + e.getMessage());
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+        try {
+            manifesteRepository.deleteById(Long.valueOf(id));
+            return ResponseEntity.noContent().build(); // 204
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur : " + e.getMessage());
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ManifestDTO>> getAllManifests() {
-        try {
-            List<Manifeste> manifests = manifesteRepository.findAll();
-            List<ManifestDTO> manifestDTOs = manifests.stream()
-                .map(ManifestDTO::fromEntity)
-                .filter(dto -> dto != null)
-                .collect(Collectors.toList());
-            return ResponseEntity.ok(manifestDTOs);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+
+    @GetMapping
+    public List<ManifestDTO> list() {
+        return manifesteRepository.findAllListItems();
     }
+
+
+
+
 }

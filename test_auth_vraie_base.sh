@@ -48,3 +48,5 @@ echo "2. Les emails ne correspondent pas à ceux de la vraie base"
 echo "3. La structure des utilisateurs est différente"
 echo ""
 echo "SOLUTION: Vérifiez les vrais identifiants dans votre base de données !"
+
+

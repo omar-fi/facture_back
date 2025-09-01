@@ -34,3 +34,5 @@ curl -s http://localhost:8080/admin/tarifs-standard | jq 'length' 2>/dev/null ||
 echo ""
 
 echo "✅ TEST TERMINÉ - Votre backend est opérationnel avec la vraie base de données !"
+
+

@@ -90,20 +90,25 @@ public class TraitementManifestService {
      */
     public List<ManifestDTO> getManifestsTraites(Integer taxateurId) {
         logger.info("Récupération des manifests traités par le taxateur: {}", taxateurId);
-        List<Manifeste> manifests = manifesteRepository.findByProcessedByAndStatut(taxateurId, Manifeste.StatutManifest.TRAITE);
-        
+
+        // Convertir Integer en Long
+        Long taxateurIdLong = taxateurId != null ? taxateurId.longValue() : null;
+
+        List<Manifeste> manifests = manifesteRepository.findByProcessedByAndStatut(taxateurIdLong, Manifeste.StatutManifest.TRAITE);
+
         return manifests.stream()
-            .map(ManifestDTO::fromEntity)
-            .filter(dto -> dto != null)
-            .collect(Collectors.toList());
+                .map(ManifestDTO::fromEntity)
+                .filter(dto -> dto != null)
+                .collect(Collectors.toList());
     }
+
 
     /**
      * Récupère un manifest par son ID
      */
     public ManifestDTO getManifestById(Integer id) {
         logger.info("Récupération du manifest avec l'ID: {}", id);
-        Optional<Manifeste> manifest = manifesteRepository.findById(id);
+        Optional<Manifeste> manifest = manifesteRepository.findById(Long.valueOf(id));
         
         return manifest.map(ManifestDTO::fromEntity).orElse(null);
     }
@@ -115,12 +120,12 @@ public class TraitementManifestService {
         logger.info("Traitement du manifest: {} par le taxateur: {}", request.getManifestId(), taxateurId);
         
         // Récupérer le manifest
-        Manifeste manifest = manifesteRepository.findById(request.getManifestId())
+        Manifeste manifest = manifesteRepository.findById(Long.valueOf(request.getManifestId()))
             .orElseThrow(() -> new RuntimeException("Manifest non trouvé"));
         
         // Mettre à jour le statut
         manifest.setStatut(Manifeste.StatutManifest.TRAITE);
-        manifest.setProcessedBy(taxateurId);
+        manifest.setProcessedBy(Long.valueOf(taxateurId));
         manifest.setDateTraitement(new Date());
         manifest.setCommentairesTraitement(request.getCommentaires());
         

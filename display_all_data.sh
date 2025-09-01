@@ -78,3 +78,5 @@ echo "Traités: $(curl -s 'http://localhost:8080/api/taxateur/manifests/traites?
 echo ""
 
 echo "✅ AFFICHAGE TERMINÉ"
+
+

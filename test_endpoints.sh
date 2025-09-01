@@ -33,3 +33,5 @@ curl -X GET http://localhost:8080/api/factures \
   -w "\nStatus: %{http_code}\n\n"
 
 echo "=== Fin des tests ==="
+
+

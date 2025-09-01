@@ -86,3 +86,5 @@ echo "Nombre de factures de l'agent: $(curl -s http://localhost:8080/api/facture
 
 echo ""
 echo "✅ TEST TERMINÉ"
+
+

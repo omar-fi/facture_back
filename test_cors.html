@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test CORS - API Manifests</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        button { padding: 10px 20px; margin: 5px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test CORS - API Manifests</h1>
+    <p>Cette page teste l'accès à l'API depuis le frontend (simulation React)</p>
+    
+    <div>
+        <button onclick="testManifestsEnAttente()">Test Manifests en Attente</button>
+        <button onclick="testTousManifests()">Test Tous les Manifests</button>
+        <button onclick="testUpload()">Test Upload Manifest</button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+        
+        function addResult(title, success, data) {
+            const resultsDiv = document.getElementById('results');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `result ${success ? 'success' : 'error'}`;
+            
+            let content = `<h3>${title}</h3>`;
+            if (success) {
+                content += `<p>✅ Succès!</p>`;
+                if (data) {
+                    content += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+            } else {
+                content += `<p>❌ Erreur: ${data}</p>`;
+            }
+            
+            resultDiv.innerHTML = content;
+            resultsDiv.appendChild(resultDiv);
+        }
+        
+        async function testManifestsEnAttente() {
+            try {
+                const response = await fetch(`${API_BASE}/api/taxateur/manifests/en-attente`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult('Manifests en Attente', true, {
+                        count: data.length,
+                        firstManifest: data[0]
+                    });
+                } else {
+                    addResult('Manifests en Attente', false, `HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                addResult('Manifests en Attente', false, error.message);
+            }
+        }
+        
+        async function testTousManifests() {
+            try {
+                const response = await fetch(`${API_BASE}/api/taxateur/manifests/all`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addResult('Tous les Manifests', true, {
+                        count: data.length,
+                        firstManifest: data[0]
+                    });
+                } else {
+                    addResult('Tous les Manifests', false, `HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                addResult('Tous les Manifests', false, error.message);
+            }
+        }
+        
+        async function testUpload() {
+            try {
+                // Créer un fichier XML de test
+                const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<IFCSUM>
+    <Header>
+        <Emetteur>TEST_AGENT</Emetteur>
+        <CodePortAnp>1</CodePortAnp>
+        <Trafic>IMPORT</Trafic>
+        <NavireID>1</NavireID>
+    </Header>
+    <DetailManifeste>
+        <Informations>
+            <InformationMarchandise>
+                <CodeSH>12345678</CodeSH>
+                <DesignationMarchandise>MARCHANDISE TEST</DesignationMarchandise>
+                <Tonnage>1000.0</Tonnage>
+            </InformationMarchandise>
+        </Informations>
+    </DetailManifeste>
+</IFCSUM>`;
+                
+                const blob = new Blob([xmlContent], { type: 'application/xml' });
+                const file = new File([blob], 'test.xml', { type: 'application/xml' });
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('agentId', '1');
+                
+                const response = await fetch(`${API_BASE}/api/manifest/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok || response.status === 201) {
+                    addResult('Upload Manifest', true, 'Manifest uploadé avec succès');
+                } else {
+                    const errorText = await response.text();
+                    addResult('Upload Manifest', false, `HTTP ${response.status}: ${errorText}`);
+                }
+            } catch (error) {
+                addResult('Upload Manifest', false, error.message);
+            }
+        }
+        
+        // Test automatique au chargement de la page
+        window.onload = function() {
+            setTimeout(() => {
+                testManifestsEnAttente();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
+

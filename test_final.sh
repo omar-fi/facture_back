@@ -95,3 +95,5 @@ echo "   Agent: agent@test.com / agent123"
 echo "   Taxateur: taxateur@test.com / taxateur123"
 echo ""
 echo "🌐 Tous les endpoints sont accessibles et fonctionnels !"
+
+

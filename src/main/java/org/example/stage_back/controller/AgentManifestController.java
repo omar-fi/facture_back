@@ -111,7 +111,7 @@ public class AgentManifestController {
     @GetMapping("/manifests/{manifestId}/status")
     public ResponseEntity<String> getManifestStatus(@PathVariable Integer manifestId) {
         try {
-            return manifesteRepository.findById(manifestId)
+            return manifesteRepository.findById(Long.valueOf(manifestId))
                 .map(manifest -> ResponseEntity.ok(manifest.getStatut().name()))
                 .orElse(ResponseEntity.notFound().build());
         } catch (Exception e) {
