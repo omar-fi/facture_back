@@ -56,6 +56,14 @@ public class HeaderXml {
     public void setTrafic(String trafic) { this.Trafic = trafic; }
 
     public Integer getNavireID() {
-        return Integer.parseInt(NavireID);
+        if (NavireID == null || NavireID.trim().isEmpty()) {
+            return null; // pas de navire dans ce manifeste
+        }
+        try {
+            return Integer.parseInt(NavireID.trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("NavireID invalide : " + NavireID, e);
+        }
     }
+
 }

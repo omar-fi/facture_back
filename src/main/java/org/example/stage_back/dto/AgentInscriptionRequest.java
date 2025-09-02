@@ -8,6 +8,6 @@ public class AgentInscriptionRequest {
     private String email;
     private String raisonSociale;
     private Long portId;
-    private Double ice;
+    private Long ice;
     private String password;
 } 

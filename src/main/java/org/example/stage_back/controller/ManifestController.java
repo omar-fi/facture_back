@@ -23,12 +23,13 @@ public class ManifestController {
     public ResponseEntity<?> uploadManifest(@RequestParam("file") MultipartFile file, @RequestParam("agentId") Long agentId) {
         try {
             manifestService.parseAndSaveManifest(file, file.getOriginalFilename(), agentId);
-            // 201 Created est plus sémantique
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
+            e.printStackTrace(); // <--- ajoute ça
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur : " + e.getMessage());
         }
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {

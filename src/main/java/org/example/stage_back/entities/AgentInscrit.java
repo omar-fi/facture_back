@@ -17,7 +17,7 @@ public class AgentInscrit {
     private String raisonSociale;
     @ManyToOne
     private Port portDemande;
-    private Double ICE;
+    private Long ICE;
     @Enumerated(EnumType.STRING)
     private Statut statut;
     private Date dateInscription;

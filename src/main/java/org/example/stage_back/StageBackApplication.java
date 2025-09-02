@@ -3,6 +3,7 @@ package org.example.stage_back;
 import org.example.stage_back.entities.*;
 import org.example.stage_back.repository.*;
 import org.springframework.boot.CommandLineRunner;
+import org.example.stage_back.service.DataSeedService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -21,8 +22,6 @@ public class StageBackApplication {
         SpringApplication.run(StageBackApplication.class, args);
     }
 
-    // DÉSACTIVÉ - UTILISATION DE LA VRAIE BASE DE DONNÉES
-    /*
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx,
                                              AdminRepository adminRepository,
@@ -65,7 +64,7 @@ public class StageBackApplication {
             // Créer un admin
             Admin admin = new Admin();
             admin.setEmail("admin@test.com");
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setPassword("admin123");
             admin.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             admin = adminRepository.save(admin);
 
@@ -73,20 +72,30 @@ public class StageBackApplication {
             port.setAdmin(admin);
             portRepository.save(port);
 
+
+
+            Agent agent1 = new Agent();
+            agent1.setEmail("agent1@test.com");
+            agent1.setPassword("agent123");
+            agent1.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+            agent1.setRaisonSociale("Entreprise Test Agent");
+            agent1.setPortDemande("Port Principal casa");
+            agent1.setPort(port);
+            agentRepository.save(agent1);
             // Créer un agent
             Agent agent = new Agent();
             agent.setEmail("agent@test.com");
-            agent.setPassword(passwordEncoder.encode("agent123"));
+            agent.setPassword("agent123");
             agent.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             agent.setRaisonSociale("Entreprise Test Agent");
             agent.setPortDemande("Port Principal");
             agent.setPort(port);
-            agent = agentRepository.save(agent);
+            agentRepository.save(agent);
 
             // Créer un taxateur
             Taxateur taxateur = new Taxateur();
             taxateur.setEmail("taxateur@test.com");
-            taxateur.setPassword(passwordEncoder.encode("taxateur123"));
+            taxateur.setPassword("taxateur123");
             taxateur.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             taxateur.setPort(port);
             taxateur = taxateurRepository.save(taxateur);
@@ -124,7 +133,7 @@ public class StageBackApplication {
             manifest1.setTrafic("IMPORT");
             manifest1.setDateDepotManifest(new Date());
             manifest1.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            manifest1.setCreatedBy(agent.getId().intValue());
+            manifest1.setCreatedBy(agent.getId());
             manifest1.setStatut(Manifeste.StatutManifest.EN_ATTENTE);
             manifest1.setPort(port);
             manifest1.setUser(agent);
@@ -135,8 +144,8 @@ public class StageBackApplication {
             manifest2.setTrafic("IMPORT");
             manifest2.setDateDepotManifest(new Date());
             manifest2.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            manifest2.setCreatedBy(agent.getId().intValue());
-            manifest2.setProcessedBy(taxateur.getId().intValue());
+            manifest2.setCreatedBy(agent.getId());
+            manifest2.setProcessedBy(taxateur.getId());
             manifest2.setStatut(Manifeste.StatutManifest.TRAITE);
             manifest2.setDateTraitement(new Date());
             manifest2.setCommentairesTraitement("Manifest traité avec succès");
@@ -149,7 +158,7 @@ public class StageBackApplication {
             manifest3.setTrafic("IMPORT");
             manifest3.setDateDepotManifest(new Date());
             manifest3.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            manifest3.setCreatedBy(agent.getId().intValue());
+            manifest3.setCreatedBy(agent.getId());
             manifest3.setStatut(Manifeste.StatutManifest.TRAITE);
             manifest3.setPort(port);
             manifest3.setUser(agent);
@@ -204,8 +213,7 @@ public class StageBackApplication {
             FactureDetail detail1 = new FactureDetail();
             detail1.setFactureEntete(facture1);
             detail1.setCategorieId(categorie1.getId());
-            detail1.setLibelle("Droit de quai");
-            detail1.setQuantite(100.0);
+            
             detail1.setMontantHT(new BigDecimal("1000.00"));
             detail1.setMontantTVA(new BigDecimal("200.00"));
             detail1.setMontantTR(new BigDecimal("50.00"));
@@ -215,8 +223,7 @@ public class StageBackApplication {
             FactureDetail detail2 = new FactureDetail();
             detail2.setFactureEntete(facture2);
             detail2.setCategorieId(categorie2.getId());
-            detail2.setLibelle("Manutention conteneur");
-            detail2.setQuantite(2.0);
+            
             detail2.setMontantHT(new BigDecimal("500.00"));
             detail2.setMontantTVA(new BigDecimal("100.00"));
             detail2.setMontantTR(new BigDecimal("25.00"));
@@ -226,5 +233,17 @@ public class StageBackApplication {
             System.out.println("Données de test créées avec succès !");
         };
     }
-    */
+
+    @Bean
+    public CommandLineRunner seedRunner(DataSeedService dataSeedService) {
+        return args -> {
+            try {
+                dataSeedService.insertSampleData();
+                System.out.println("Données seed insérées via CommandLineRunner.");
+            } catch (Exception ex) {
+                System.out.println("Insertion seed ignorée: " + ex.getMessage());
+            }
+        };
+    }
+
 }
