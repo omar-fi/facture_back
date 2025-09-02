@@ -1,8 +1,6 @@
 package org.example.stage_back.dto;
 
 import org.example.stage_back.entities.Manifeste;
-import org.example.stage_back.entities.Navire;
-import org.example.stage_back.entities.Port;
 
 import java.util.Date;
 
@@ -12,11 +10,10 @@ public record ManifestDTO(
         String port,
         Date dateDepot,
         String trafic,
-        Long createdBy
+        Long createdBy,
+        Integer escaleId   // <-- nouveau champ
 ) {
-    // Record avec constructeur automatique
-    
-    // Factory method depuis l'entité Manifeste
+
     public static ManifestDTO fromEntity(Manifeste manifeste) {
         if (manifeste == null) return null;
         return new ManifestDTO(
@@ -25,7 +22,8 @@ public record ManifestDTO(
                 manifeste.getPort() != null ? manifeste.getPort().getNom() : null,
                 manifeste.getDateDepotManifest(),
                 manifeste.getTrafic(),
-                manifeste.getCreatedBy()
+                manifeste.getCreatedBy(),
+                manifeste.getEscale() != null ? manifeste.getEscale().getId() : null  // <-- remplir escaleId
         );
     }
 }

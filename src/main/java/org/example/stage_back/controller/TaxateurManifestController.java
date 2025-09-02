@@ -20,22 +20,31 @@ public class TaxateurManifestController {
     @GetMapping("/en-attente")
     public ResponseEntity<List<ManifestDTO>> getEnAttente() {
         try {
-            List<ManifestDTO> manifests = manifesteRepository.findManifestsEnAttenteByStatut(Manifeste.StatutManifest.EN_ATTENTE);
-            return ResponseEntity.ok(manifests);
+            List<Manifeste> manifests = manifesteRepository.findByStatut(Manifeste.StatutManifest.EN_ATTENTE);
+            // Conversion Manifeste -> ManifestDTO
+            List<ManifestDTO> dtoList = manifests.stream()
+                    .map(ManifestDTO::fromEntity)
+                    .toList();
+            return ResponseEntity.ok(dtoList);
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }
     }
 
+
     // 2. Manifests traités par un taxateur
     @GetMapping("/traites")
     public ResponseEntity<List<ManifestDTO>> getTraites(@RequestParam Long taxateurId) {
         try {
-            List<ManifestDTO> manifests = manifesteRepository.findByStatutAndTaxateurId(Manifeste.StatutManifest.TRAITE, taxateurId);
-            return ResponseEntity.ok(manifests);
+            List<Manifeste> manifests = manifesteRepository.findByStatutAndTaxateurId(Manifeste.StatutManifest.TRAITE, taxateurId);
+            List<ManifestDTO> dtoList = manifests.stream()
+                    .map(ManifestDTO::fromEntity)
+                    .toList();
+            return ResponseEntity.ok(dtoList);
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }
     }
+
 
 }

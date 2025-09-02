@@ -12,8 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +23,6 @@ public class ManifestService {
     private final PortRepository portRepository;
     private final EscaleRepository escaleRepository;
     private final NavireRepository navireRepository;
-
 
     /**
      * Parse le fichier XML IFCSUM en objets JAXB
@@ -79,6 +76,18 @@ public class ManifestService {
         // 5) Navire
         if (header.getNavireID() != null) {
             navireRepository.findById(header.getNavireID()).ifPresent(manifeste::setNavire);
+        }
+
+        // 5bis) Escale via NumeroAvis
+        if (header.getNumeroAvis() != null && !header.getNumeroAvis().isEmpty()) {
+            try {
+                Integer escaleId = Integer.valueOf(header.getNumeroAvis().trim());
+                Escale escale = escaleRepository.findById(escaleId)
+                        .orElseThrow(() -> new IllegalStateException("Aucune escale trouvée avec id=" + escaleId));
+                manifeste.setEscale(escale);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("NumeroAvis invalide pour l'escale : " + header.getNumeroAvis());
+            }
         }
 
         // 6) Lignes
