@@ -3,11 +3,11 @@ package org.example.stage_back.xml_parser;
 import jakarta.xml.bind.annotation.*;
 import java.util.List;
 
-@XmlRootElement(name = "IFCSUM_XML")
+@XmlRootElement(name = "IFCSUM")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class IfcSumXml {
 
-    @XmlElement(name = "header")
+    @XmlElement(name = "Header")
     private HeaderXml header;
 
     @XmlElement(name = "DetailManifeste")

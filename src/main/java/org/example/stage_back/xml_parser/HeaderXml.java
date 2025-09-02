@@ -56,6 +56,10 @@ public class HeaderXml {
     public void setTrafic(String trafic) { this.Trafic = trafic; }
 
     public Integer getNavireID() {
-        return Integer.parseInt(NavireID);
+        try {
+            return (NavireID == null || NavireID.isBlank()) ? null : Integer.parseInt(NavireID.trim());
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }
