@@ -6,6 +6,7 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DetailManifest {
 
+    @XmlElementWrapper(name = "Informations")
     @XmlElement(name = "InformationMarchandise")
     private List<InformationMarchandise> informations;
 
