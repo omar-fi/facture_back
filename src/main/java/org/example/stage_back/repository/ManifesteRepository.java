@@ -59,7 +59,28 @@ public interface ManifesteRepository extends JpaRepository<Manifeste, Long> {
             "ORDER BY m.dateDepotManifest DESC")
     List<Manifeste> findByStatutAndTaxateurId(Manifeste.StatutManifest statut, Long taxateurId);
 
-    // Nouvelle méthode : récupération des manifests en attente directement en DTO
+    @Query("SELECT new org.example.stage_back.dto.ManifestDTO(" +
+            "m.id, n.nom, p.nom, m.dateDepotManifest, m.trafic, m.createdBy, m.escale.id) " +
+            "FROM Manifeste m " +
+            "LEFT JOIN m.navire n " +
+            "LEFT JOIN m.port p " +
+            "WHERE m.statut = :statut AND m.processedBy = :taxateurId " +
+            "ORDER BY m.dateDepotManifest DESC")
+    List<ManifestDTO> findTraitesByTaxateurId(Manifeste.StatutManifest statut, Long taxateurId);
+
+
+    @Query("SELECT new org.example.stage_back.dto.ManifestDTO(" +
+                "m.id, n.nom, p.nom, m.dateDepotManifest, m.trafic, m.createdBy, m.escale.id) " +
+                "FROM Manifeste m " +
+                "LEFT JOIN m.navire n " +
+                "LEFT JOIN m.port p " +
+                "WHERE m.statut = :statut " +
+                "ORDER BY m.dateDepotManifest DESC")
+        List<ManifestDTO> findManifestsByStatut(Manifeste.StatutManifest statut);
+
+
+
+    // Pour les manifests en attente
     @Query("SELECT new org.example.stage_back.dto.ManifestDTO(" +
             "m.id, " +
             "n.nom, " +
@@ -68,10 +89,11 @@ public interface ManifesteRepository extends JpaRepository<Manifeste, Long> {
             "m.trafic, " +
             "m.createdBy, " +
             "m.escale.id)"+
-            "FROM Manifeste m " +
-            "LEFT JOIN m.navire n " +
-            "LEFT JOIN m.port p " +
-            "WHERE m.statut = :statut " +
-            "ORDER BY m.dateDepotManifest DESC")
-    List<ManifestDTO> findManifestsEnAttenteByStatut(Manifeste.StatutManifest statut);
+            " FROM Manifeste m " +
+            " LEFT JOIN m.navire n " +
+            " LEFT JOIN m.port p " +
+            " WHERE m.statut = :statut " +
+            " ORDER BY m.dateDepotManifest DESC")
+    List<ManifestDTO> findEnAttenteByStatut(Manifeste.StatutManifest statut);
+
 }

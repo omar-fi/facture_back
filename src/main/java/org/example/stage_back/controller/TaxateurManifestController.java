@@ -2,6 +2,7 @@ package org.example.stage_back.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.stage_back.dto.ManifestDTO;
+import org.example.stage_back.dto.TraitementManifestDTO;
 import org.example.stage_back.entities.Manifeste;
 import org.example.stage_back.repository.ManifesteRepository;
 import org.springframework.http.ResponseEntity;
@@ -16,35 +17,57 @@ public class TaxateurManifestController {
 
     private final ManifesteRepository manifesteRepository;
 
-    // 1. Manifests en attente - Récupération depuis la base de données
     @GetMapping("/en-attente")
     public ResponseEntity<List<ManifestDTO>> getEnAttente() {
         try {
-            List<Manifeste> manifests = manifesteRepository.findByStatut(Manifeste.StatutManifest.EN_ATTENTE);
-            // Conversion Manifeste -> ManifestDTO
-            List<ManifestDTO> dtoList = manifests.stream()
-                    .map(ManifestDTO::fromEntity)
-                    .toList();
+            List<ManifestDTO> dtoList = manifesteRepository.findManifestsByStatut(Manifeste.StatutManifest.EN_ATTENTE);
             return ResponseEntity.ok(dtoList);
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            e.printStackTrace(); // ← pour debug
+            return ResponseEntity.status(500).body(null);
         }
     }
 
 
-    // 2. Manifests traités par un taxateur
     @GetMapping("/traites")
     public ResponseEntity<List<ManifestDTO>> getTraites(@RequestParam Long taxateurId) {
         try {
-            List<Manifeste> manifests = manifesteRepository.findByStatutAndTaxateurId(Manifeste.StatutManifest.TRAITE, taxateurId);
-            List<ManifestDTO> dtoList = manifests.stream()
-                    .map(ManifestDTO::fromEntity)
-                    .toList();
+            List<ManifestDTO> dtoList = manifesteRepository.findTraitesByTaxateurId(Manifeste.StatutManifest.TRAITE, taxateurId);
             return ResponseEntity.ok(dtoList);
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            e.printStackTrace(); // ← Important pour voir la vraie erreur
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+    @PostMapping("/traiter")
+    public ResponseEntity<?> traiterManifest(
+            @RequestParam Long taxateurId,
+            @RequestBody TraitementManifestDTO payload
+    ) {
+        try {
+            Manifeste manifeste = manifesteRepository.findById(payload.getManifestId())
+                    .orElseThrow(() -> new RuntimeException("Manifeste introuvable"));
+
+            // Mise à jour du statut et du taxateur
+            manifeste.setStatut(Manifeste.StatutManifest.TRAITE);
+            manifeste.setProcessedBy(taxateurId);
+
+            // Ici tu peux traiter les lignes si besoin, sinon ignorer
+            // payload.getLignes() ...
+
+            manifesteRepository.save(manifeste);
+
+            return ResponseEntity.ok("Manifeste traité avec succès");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur lors du traitement : " + e.getMessage());
         }
     }
 
 
+
 }
+
+
+
+

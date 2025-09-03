@@ -78,8 +78,9 @@ public class StageBackApplication {
             agent1.setEmail("agent1@test.com");
             agent1.setPassword("agent123");
             agent1.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            agent1.setRaisonSociale("Entreprise Test Agent");
+            agent1.setRaisonSociale("mohamed");
             agent1.setPortDemande("Port Principal casa");
+            agent1.setICE(245788497878656L);
             agent1.setPort(port);
             agentRepository.save(agent1);
             // Créer un agent
@@ -87,8 +88,9 @@ public class StageBackApplication {
             agent.setEmail("agent@test.com");
             agent.setPassword("agent123");
             agent.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-            agent.setRaisonSociale("Entreprise Test Agent");
+            agent.setRaisonSociale("omar");
             agent.setPortDemande("Port Principal");
+            agent.setICE(123456789345231L);
             agent.setPort(port);
             agentRepository.save(agent);
 
@@ -196,39 +198,10 @@ public class StageBackApplication {
             ligne6.setPoids(200.0);
             manifestLineRepository.save(ligne6);
 
-            // Créer des factures
-            FactureEntete facture1 = new FactureEntete();
-            facture1.setDateEmissionFact(new Date());
-            facture1.setManifeste(manifest2);
-            facture1.setEscale(escale);
-            facture1 = factureEnteteRepository.save(facture1);
 
-            FactureEntete facture2 = new FactureEntete();
-            facture2.setDateEmissionFact(new Date());
-            facture2.setManifeste(manifest3);
-            facture2.setEscale(escale);
-            facture2 = factureEnteteRepository.save(facture2);
 
-            // Créer des détails de facture
-            FactureDetail detail1 = new FactureDetail();
-            detail1.setFactureEntete(facture1);
-            detail1.setCategorieId(categorie1.getId());
-            
-            detail1.setMontantHT(new BigDecimal("1000.00"));
-            detail1.setMontantTVA(new BigDecimal("200.00"));
-            detail1.setMontantTR(new BigDecimal("50.00"));
-            detail1.setMontantTTC(new BigDecimal("1250.00"));
-            factureDetailRepository.save(detail1);
 
-            FactureDetail detail2 = new FactureDetail();
-            detail2.setFactureEntete(facture2);
-            detail2.setCategorieId(categorie2.getId());
-            
-            detail2.setMontantHT(new BigDecimal("500.00"));
-            detail2.setMontantTVA(new BigDecimal("100.00"));
-            detail2.setMontantTR(new BigDecimal("25.00"));
-            detail2.setMontantTTC(new BigDecimal("625.00"));
-            factureDetailRepository.save(detail2);
+
 
             System.out.println("Données de test créées avec succès !");
         };

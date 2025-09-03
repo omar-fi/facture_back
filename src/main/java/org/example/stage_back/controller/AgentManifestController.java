@@ -10,6 +10,7 @@ import org.example.stage_back.repository.FactureEnteteRepository;
 import org.example.stage_back.repository.AgentRepository;
 import org.example.stage_back.service.FacturePdfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Map;
@@ -86,24 +88,27 @@ public class AgentManifestController {
     public ResponseEntity<Resource> downloadFacture(@PathVariable Integer factureId) {
         try {
             FactureEntete facture = factureEnteteRepository.findById(Long.valueOf(factureId))
-                .orElse(null);
-            
+                    .orElse(null);
+
             if (facture == null) {
                 return ResponseEntity.notFound().build();
             }
 
             // Générer le PDF
-            Resource pdfResource = facturePdfService.generateFacturePdf(facture);
-            
+            ByteArrayInputStream pdfStream = facturePdfService.generateFacturePdf(facture);
+            ByteArrayResource pdfResource = new ByteArrayResource(pdfStream.readAllBytes());
+
             return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"facture_" + factureId + ".pdf\"")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(pdfResource);
-                
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"facture_" + factureId + ".pdf\"")
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .contentLength(pdfResource.contentLength())
+                    .body(pdfResource);
+
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
     }
+
 
     /**
      * Récupère le statut d'un manifest spécifique
