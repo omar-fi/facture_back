@@ -1,95 +1,62 @@
 package org.example.stage_back.controller;
 
-import org.example.stage_back.dto.FactureDTO;
+import org.example.stage_back.dto.EmailRequest;
+import org.example.stage_back.dto.FactureMailRequestDTO;
 import org.example.stage_back.entities.FactureEntete;
 import org.example.stage_back.repository.FactureEnteteRepository;
-import org.example.stage_back.service.FacturePdfService;
+import org.example.stage_back.service.FactureService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/factures")
 public class FactureController {
 
-    @Autowired
-    private FactureEnteteRepository factureEnteteRepository;
+    private final FactureEnteteRepository factureEnteteRepository;
+    private final FactureService factureService;
 
     @Autowired
-    private FacturePdfService facturePdfService;
-
-    @GetMapping
-    public List<FactureDTO> getAllFactures() {
-        return factureEnteteRepository.findAll().stream()
-                .map(FactureDTO::fromEntity)
-                .collect(Collectors.toList());
+    public FactureController(FactureEnteteRepository factureEnteteRepository,
+                             FactureService factureService) {
+        this.factureEnteteRepository = factureEnteteRepository;
+        this.factureService = factureService;
     }
 
-    @GetMapping("/agent/{agentId}")
-    public List<FactureDTO> getFacturesByAgent(@PathVariable Long agentId) {
-        return factureEnteteRepository.findByManifeste_User_Id(agentId).stream()
-                .map(FactureDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<FactureDTO> getFactureById(@PathVariable Long id) {
-        return factureEnteteRepository.findById(id)
-                .map(FactureDTO::fromEntity)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    /**
-     * Télécharge une facture en PDF
-     */
-    @GetMapping("/{id}/download")
-    public ResponseEntity<Resource> downloadFacture(@PathVariable Long id) {
+    @PostMapping("/{id}/envoyer")
+    public ResponseEntity<String> envoyerFacture(@PathVariable Long id,
+                                                 @RequestParam String email) {
         try {
-            FactureEntete facture = factureEnteteRepository.findById(id)
-                    .orElse(null);
+            FactureMailRequestDTO request = new FactureMailRequestDTO();
+            request.setFactureId(id);
+            request.setEmailDestinataire(email);
 
-            if (facture == null) {
-                return ResponseEntity.notFound().build();
-            }
+            factureService.envoyerFactureParMail(request);
 
-            // Générer le PDF
-            ByteArrayInputStream pdfStream = facturePdfService.generateFacturePdf(facture);
-            ByteArrayResource pdfResource = new ByteArrayResource(pdfStream.readAllBytes());
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"facture_" + id + ".pdf\"")
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .contentLength(pdfResource.contentLength())
-                    .body(pdfResource);
-
+            return ResponseEntity.ok("Facture envoyée avec succès !");
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur lors de l'envoi de la facture: " + e.getMessage());
         }
     }
 
-    @PostMapping
-    public FactureEntete createFacture(@RequestBody FactureEntete facture) {
-        return factureEnteteRepository.save(facture);
+    @PostMapping("/sendEmail")
+    public ResponseEntity<?> sendEmail(@RequestBody EmailRequest request) {
+        try {
+            // Appelez un nouveau service ou modifiez l'existant pour qu'il prenne l'objet EmailRequest
+            factureService.envoyerEmailAvecPdf(request); // Créez cette nouvelle méthode
+            return ResponseEntity.ok("Mail envoyé !");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur : " + e.getMessage());
+        }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<FactureEntete> updateFacture(@PathVariable Long id, @RequestBody FactureEntete factureDetails) {
+    @GetMapping("/{id}")
+    public ResponseEntity<FactureEntete> getFactureById(@PathVariable Long id) {
         return factureEnteteRepository.findById(id)
-                .map(facture -> {
-                    facture.setDateEmissionFact(factureDetails.getDateEmissionFact());
-                    facture.setDateReglementFact(factureDetails.getDateReglementFact());
-                    FactureEntete updatedFacture = factureEnteteRepository.save(facture);
-                    return ResponseEntity.ok(updatedFacture);
-                }).orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

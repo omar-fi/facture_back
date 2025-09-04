@@ -16,12 +16,13 @@ public class FactureEntete {
 
     @ManyToOne
     private Escale escale;
+    @OneToMany(mappedBy = "factureEntete", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FactureDetail> details;
 
     @ManyToOne
     private Manifeste manifeste;
 
-    @OneToMany(mappedBy = "factureEntete")
-    private List<FactureDetail> details;
+
 
     @OneToMany(mappedBy = "factureEntete")
     private List<EncaissementFacture> encaissements;

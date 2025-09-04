@@ -20,6 +20,8 @@ public class Escale {
     @ManyToOne
     private Port port;
 
+    @ManyToOne
+    private Agent agent;
     @OneToMany(mappedBy = "escale")
     private List<Manifeste> manifestes;
 

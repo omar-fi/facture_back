@@ -85,7 +85,7 @@ public class StageBackApplication {
             agentRepository.save(agent1);
             // Créer un agent
             Agent agent = new Agent();
-            agent.setEmail("agent@test.com");
+            agent.setEmail("filaliomar070@gmail.com");
             agent.setPassword("agent123");
             agent.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             agent.setRaisonSociale("omar");

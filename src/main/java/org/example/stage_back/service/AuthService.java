@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
+
     @Autowired
     private AdminRepository adminRepository;
     @Autowired
@@ -23,28 +24,25 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     public String authenticate(String email, String password) {
-        // Test avec Admin
+        // Correct usage of the injected instance variable
         Admin admin = adminRepository.findByEmail(email).orElse(null);
         if (admin != null) {
-            // Vérifier si le mot de passe est encodé en BCrypt ou en clair
             if (passwordEncoder.matches(password, admin.getPassword()) || password.equals(admin.getPassword())) {
                 return "ADMIN";
             }
         }
 
-        // Test avec Agent
+        // Correct usage of the injected instance variable
         Agent agent = agentRepository.findByEmail(email).orElse(null);
         if (agent != null) {
-            // Vérifier si le mot de passe est encodé en BCrypt ou en clair
             if (passwordEncoder.matches(password, agent.getPassword()) || password.equals(agent.getPassword())) {
                 return "AGENT";
             }
         }
 
-        // Test avec Taxateur
+        // Correct usage of the injected instance variable
         Taxateur taxateur = taxateurRepository.findByEmail(email).orElse(null);
         if (taxateur != null) {
-            // Vérifier si le mot de passe est encodé en BCrypt ou en clair
             if (passwordEncoder.matches(password, taxateur.getPassword()) || password.equals(taxateur.getPassword())) {
                 return "TAXATEUR";
             }
@@ -52,4 +50,4 @@ public class AuthService {
 
         throw new RuntimeException("Email ou mot de passe incorrect");
     }
-} 
+}
