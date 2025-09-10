@@ -4,9 +4,11 @@ import org.example.stage_back.entities.Manifeste;
 import org.example.stage_back.dto.ManifestDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ManifesteRepository extends JpaRepository<Manifeste, Long> {
@@ -95,5 +97,11 @@ public interface ManifesteRepository extends JpaRepository<Manifeste, Long> {
             " WHERE m.statut = :statut " +
             " ORDER BY m.dateDepotManifest DESC")
     List<ManifestDTO> findEnAttenteByStatut(Manifeste.StatutManifest statut);
+    @Query("SELECT m FROM Manifeste m LEFT JOIN FETCH m.manifestLines WHERE m.id = :id")
+    Optional<Manifeste> findByIdWithLines(@Param("id") Long id);
 
+
+    List<Manifeste> findByUser_Id(Long id);
+
+    Optional<Manifeste> findByEscale_Id(Long escaleId);
 }

@@ -1,5 +1,14 @@
 package org.example.stage_back.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.example.stage_back.dto.FactureDetailDTO;
+import org.example.stage_back.entities.Agent;
+import org.example.stage_back.entities.Manifeste;
+import org.example.stage_back.repository.AgentRepository;
+import org.example.stage_back.repository.ManifesteRepository;
+import org.example.stage_back.service.FactureService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.example.stage_back.dto.EmailRequest;
 import org.example.stage_back.dto.FactureMailRequestDTO;
 import org.example.stage_back.entities.FactureEntete;
@@ -10,18 +19,32 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api/factures")
+@RequiredArgsConstructor
 public class FactureController {
 
-    private final FactureEnteteRepository factureEnteteRepository;
     private final FactureService factureService;
+    private final AgentRepository agentRepository;
+    private final ManifesteRepository manifesteRepository;
+    private final FactureEnteteRepository factureEnteteRepository;
 
-    @Autowired
-    public FactureController(FactureEnteteRepository factureEnteteRepository,
-                             FactureService factureService) {
-        this.factureEnteteRepository = factureEnteteRepository;
-        this.factureService = factureService;
+    @GetMapping("/calcule")
+    public ResponseEntity<FactureDetailDTO> calculeFacture(
+            @RequestParam Long agentId,
+            @RequestParam Long manifesteId) {
+
+        Agent agent = agentRepository.findById(agentId)
+                .orElseThrow(() -> new RuntimeException("❌ Agent introuvable"));
+
+        Manifeste manifeste = manifesteRepository.findByIdWithLines(manifesteId)
+                .orElseThrow(() -> new RuntimeException("❌ Manifeste introuvable"));
+
+
+        FactureDetailDTO dto = factureService.calculerFacture(agent, manifeste);
+
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping("/{id}/envoyer")
@@ -66,5 +89,27 @@ public class FactureController {
                     factureEnteteRepository.delete(facture);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
+    }
+
+    // DTO pour recevoir l'agent et le manifeste depuis le body
+    public static class FactureRequest {
+        private Agent agent;
+        private Manifeste manifeste;
+
+        public Agent getAgent() {
+            return agent;
+        }
+
+        public void setAgent(Agent agent) {
+            this.agent = agent;
+        }
+
+        public Manifeste getManifeste() {
+            return manifeste;
+        }
+
+        public void setManifeste(Manifeste manifeste) {
+            this.manifeste = manifeste;
+        }
     }
 }

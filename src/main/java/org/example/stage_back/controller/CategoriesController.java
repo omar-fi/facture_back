@@ -20,8 +20,13 @@ import java.util.jar.Manifest;
 @RequestMapping("/admin/categories")
 public class CategoriesController {
 
+
+    private final CategoriesRepository categoriesRepository;
+
     @Autowired
-    private CategoriesRepository categoriesRepository;
+    public CategoriesController(CategoriesRepository categoriesRepository) {
+        this.categoriesRepository = categoriesRepository;
+    }
 
     @GetMapping
     public List<Categories> getAllCategories() {

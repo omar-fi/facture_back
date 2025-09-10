@@ -20,7 +20,8 @@
     <description>Stage_back</description>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>23</java.version>
+
     </properties>
 
     <dependencies>
@@ -112,7 +113,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <release>17</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -120,6 +120,9 @@
                             <version>1.18.30</version>
                         </path>
                     </annotationProcessorPaths>
+                    <source>23</source>
+                    <target>23</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
 

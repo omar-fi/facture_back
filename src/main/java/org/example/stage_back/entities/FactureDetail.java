@@ -17,6 +17,7 @@ public class FactureDetail {
     private FactureEntete factureEntete;
 
     private Integer categorieId;
+    private String codeSh;
     private Integer numeroLigneFact;
     private BigDecimal montantHT;
     private BigDecimal montantTVA;

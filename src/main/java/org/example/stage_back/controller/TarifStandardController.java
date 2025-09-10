@@ -27,7 +27,7 @@ public class TarifStandardController {
 
     @PutMapping("/{id}")
     public ResponseEntity<TarifStandard> update(@PathVariable Integer id, @RequestBody TarifStandard details) {
-        return tarifStandardRepository.findById(id)
+        return tarifStandardRepository.findById(Long.valueOf(id))
                 .map(tarif -> {
                     tarif.setPortId(details.getPortId());
                     tarif.setCategorie(details.getCategorie());
@@ -42,7 +42,7 @@ public class TarifStandardController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
-        return tarifStandardRepository.findById(id)
+        return tarifStandardRepository.findById(Long.valueOf(id))
                 .map(tarif -> {
                     tarifStandardRepository.delete(tarif);
                     return ResponseEntity.ok().build();

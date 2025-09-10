@@ -16,8 +16,8 @@ public class ManifestLineDTO {
         
         ManifestLineDTO dto = new ManifestLineDTO();
         dto.setId(line.getId());
-        dto.setLibelleMH(line.getLibelleMH());
-        dto.setCodeSH(line.getCodeSH());
+        dto.setLibelleMH(line.getLibellemh());
+        dto.setCodeSH(line.getCodesh());
         dto.setPoids(line.getPoids());
         dto.setMarchandise(line.getMarchandise());
         return dto;

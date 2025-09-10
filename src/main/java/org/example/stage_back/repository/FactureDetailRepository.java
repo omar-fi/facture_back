@@ -1,5 +1,6 @@
 package org.example.stage_back.repository;
 
+import jakarta.persistence.Entity;
 import org.example.stage_back.entities.FactureDetail;
 import org.example.stage_back.entities.FactureEntete;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,5 @@ import java.util.List;
 @Repository
 public interface FactureDetailRepository extends JpaRepository<FactureDetail, Long> {
     List<FactureDetail> findByFactureEntete(FactureEntete factureEntete);
+    List<FactureDetail> findByCodeSh(String codeSh);
 } 

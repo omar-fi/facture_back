@@ -21,4 +21,20 @@ public class ManifestLine {
     private String libelleMH;
     private Double poids;
     private Double volume;
-} 
+
+    public Double getQuantite() {
+        return poids;
+    }
+
+    public String getLibellemh() {
+        return libelleMH;
+    }
+
+    public Integer getCodesh() {
+        return codeSH;
+    }
+    public boolean hasCodeSH() {
+        return codeSH != null;
+    }
+
+}
